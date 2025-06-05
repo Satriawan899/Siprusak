@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sip_rusak/costom_check_item.dart';
+import 'package:sip_rusak/widgets/costom_check_item.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
