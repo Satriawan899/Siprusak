@@ -1,13 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:sip_rusak/screens/register_screen.dart';
+import 'package:sip_rusak/screens/request_location.dart'; // Ganti dengan halaman lokasimu
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    bool rememberMe = false;
+  State<LoginScreen> createState() => _LoginScreenState();
+}
 
+class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  bool rememberMe = false;
+
+  void _handleLogin() {
+    final email = emailController.text.trim();
+    final password = passwordController.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Email dan password tidak boleh kosong')),
+      );
+      return;
+    }
+
+    // Jika login berhasil, arahkan ke halaman permintaan lokasi
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const RequestLocationPage()),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -16,10 +42,7 @@ class LoginScreen extends StatelessWidget {
           child: ListView(
             children: [
               const SizedBox(height: 30),
-              Image.asset(
-                'assets/images/login.png', // Tambahkan ke assets
-                height: 200,
-              ),
+              Image.asset('assets/images/login.png', height: 200),
               const SizedBox(height: 30),
               const Text(
                 'Login',
@@ -28,7 +51,8 @@ class LoginScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               TextField(
-                decoration: InputDecoration(
+                controller: emailController,
+                decoration: const InputDecoration(
                   labelText: 'Email or Phone',
                   hintText: 'Enter email or phone number',
                   border: OutlineInputBorder(),
@@ -37,8 +61,9 @@ class LoginScreen extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               TextField(
+                controller: passwordController,
                 obscureText: true,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Password',
                   hintText: 'Enter your password',
                   border: OutlineInputBorder(),
@@ -55,7 +80,9 @@ class LoginScreen extends StatelessWidget {
                       Checkbox(
                         value: rememberMe,
                         onChanged: (value) {
-                          // Tambahkan logic state jika perlu
+                          setState(() {
+                            rememberMe = value ?? false;
+                          });
                         },
                       ),
                       const Text('Remember me'),
@@ -63,7 +90,7 @@ class LoginScreen extends StatelessWidget {
                   ),
                   TextButton(
                     onPressed: () {
-                      // Forgot password logic
+                      // Tambahkan logika lupa password di sini
                     },
                     child: const Text('Forget password?'),
                   ),
@@ -71,13 +98,14 @@ class LoginScreen extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               ElevatedButton(
-                onPressed: () {
-                  // Login logic
-                },
+                onPressed: _handleLogin,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF2E6D9C),
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   textStyle: const TextStyle(fontSize: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
                 child: const Text(
                   'Login',
@@ -122,7 +150,7 @@ class LoginScreen extends StatelessWidget {
               const SizedBox(height: 16),
               ElevatedButton.icon(
                 onPressed: () {
-                  // Google login logic
+                  // Tambahkan logika login dengan Google
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.grey[200],
