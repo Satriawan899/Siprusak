@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sip_rusak/screens/home_screen.dart';
 import 'package:sip_rusak/screens/register_screen.dart';
 import 'package:sip_rusak/screens/request_location.dart'; // Ganti dengan halaman lokasimu
 
@@ -28,7 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
     // Jika login berhasil, arahkan ke halaman permintaan lokasi
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => const RequestLocationPage()),
+      MaterialPageRoute(builder: (context) => const HomeScreen()),
     );
   }
 

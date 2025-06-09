@@ -3,6 +3,7 @@ import 'package:sip_rusak/screens/home_screen.dart';
 import 'package:sip_rusak/screens/lapor_screen.dart';
 import 'package:sip_rusak/screens/riwayat_screen.dart';
 import 'package:sip_rusak/screens/profile_screen.dart';
+import 'package:sip_rusak/screens/scan_screen.dart';
 
 class MainNavigation extends StatefulWidget {
   @override
@@ -17,6 +18,7 @@ class _MainNavigationState extends State<MainNavigation> {
     LaporScreen(),
     RiwayatScreen(),
     ProfileScreen(),
+    ScanScreen(),
   ];
 
   @override

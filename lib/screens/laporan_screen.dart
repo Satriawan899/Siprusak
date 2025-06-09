@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class RiwayatScreen extends StatelessWidget {
-  const RiwayatScreen({super.key});
+class LaporanScreen extends StatelessWidget {
+  const LaporanScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -9,7 +9,7 @@ class RiwayatScreen extends StatelessWidget {
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
         title: const Text(
-          'Riwayat',
+          'Laporan saya',
           style: TextStyle(fontWeight: FontWeight.bold, color: Color.fromARGB(221, 255, 255, 255)),
         ),
         backgroundColor: const Color(0xFF2E6D9C), // Warna biru dari home screen
@@ -25,51 +25,22 @@ class RiwayatScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         children: [
           _buildReportCard(
+            context: context,
             name: 'Yulia Nita',
             time: '1 Jam Lalu Pengaduan',
             location: 'Denpasar Selatan, Bali',
             description:
                 'Dengan hormat, saya melaporkan kejadian yang terjadi di Bali. Harapan saya agar kejadian ini dapat ditindaklanjuti oleh pihak yang berwenang.',
-            imageUrl:
-                'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=400&h=200&fit=crop',
+            imageUrl: 'assets/images/images.png',
             status: 'Dalam Proses',
             statusColor: Colors.orange,
-          ),
-          const SizedBox(height: 16),
-          _buildReportCard(
-            name: 'Ahmad Rizky',
-            time: '3 Jam Lalu Pengaduan',
-            location: 'Denpasar Utara, Bali',
-            description:
-                'Jalan di depan rumah saya mengalami kerusakan parah. Banyak lubang yang membahayakan pengendara motor.',
-            imageUrl:
-                'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=400&h=200&fit=crop',
-            status: 'Selesai',
-            statusColor: Colors.green,
-          ),
-          const SizedBox(height: 16),
-          _buildReportCard(
-            name: 'Siti Rahayu',
-            time: '1 Hari Lalu Pengaduan',
-            location: 'Badung, Bali',
-            description:
-                'Lampu jalan di sekitar area ini sudah mati sejak seminggu yang lalu. Mohon untuk segera diperbaiki.',
-            imageUrl:
-                'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=400&h=200&fit=crop',
-            status: 'Ditolak',
-            statusColor: Colors.red,
-          ),
-          const SizedBox(height: 16),
-          _buildReportCard(
-            name: 'Made Wirawan',
-            time: '2 Hari Lalu Pengaduan',
-            location: 'Gianyar, Bali',
-            description:
-                'Saluran air di jalan utama tersumbat dan menyebabkan banjir saat hujan. Mohon segera dibersihkan.',
-            imageUrl:
-                'https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=400&h=200&fit=crop',
-            status: 'Dalam Proses',
-            statusColor: Colors.orange,
+            steps: [
+              {'label': 'Pengaduan', 'description': 'Isi Pengaduan yang dilaporkan', 'isDone': true},
+              {'label': 'Bukti Gambar', 'description': 'Lihat Gambar.', 'isDone': true},
+              {'label': 'Pratinjau', 'description': 'Peninjauan terhadap laporan.', 'isDone': true},
+              {'label': 'Selesai', 'description': 'Pengaduan telah dilaporkan', 'isDone': false},
+            ],
+            currentStepIndex: 2,
           ),
         ],
       ),
@@ -77,6 +48,7 @@ class RiwayatScreen extends StatelessWidget {
   }
 
   Widget _buildReportCard({
+    required BuildContext context,
     required String name,
     required String time,
     required String location,
@@ -84,6 +56,8 @@ class RiwayatScreen extends StatelessWidget {
     required String imageUrl,
     required String status,
     required Color statusColor,
+    required List<Map<String, dynamic>> steps,
+    required int currentStepIndex,
   }) {
     return Container(
       decoration: BoxDecoration(
@@ -108,6 +82,7 @@ class RiwayatScreen extends StatelessWidget {
               Expanded(
                 child: Row(
                   children: [
+                    // ----- START MODIFICATION HERE -----
                     Container(
                       width: 50,
                       height: 50,
@@ -121,12 +96,14 @@ class RiwayatScreen extends StatelessWidget {
                         color: Color(0xFF2E6D9C), // Warna ikon
                       ),
                     ),
+                    // ----- END MODIFICATION HERE -----
                     const SizedBox(width: 12),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          // Hapus Row yang berisi ikon person di sini jika Anda sudah memindahkannya ke kiri
+                          Text( // Ini adalah Text(name) Anda
                             name,
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
@@ -197,7 +174,7 @@ class RiwayatScreen extends StatelessWidget {
           const SizedBox(height: 12),
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
-            child: Image.network(
+            child: Image.asset(
               imageUrl,
               height: 150,
               width: double.infinity,
@@ -209,7 +186,25 @@ class RiwayatScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               TextButton.icon(
-                onPressed: () {},
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext dialogContext) {
+                      return Dialog(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: Image.asset(
+                            imageUrl,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
                 icon: const Icon(Icons.visibility, size: 16),
                 label: const Text('Lihat Detail'),
                 style: TextButton.styleFrom(
@@ -217,14 +212,113 @@ class RiwayatScreen extends StatelessWidget {
                 ),
               ),
               TextButton.icon(
-                onPressed: () {},
+                onPressed: () {
+                  // TODO: Implementasi fungsi bagikan
+                },
                 icon: const Icon(Icons.share, size: 16),
                 label: const Text('Bagikan'),
                 style: TextButton.styleFrom(foregroundColor: Colors.grey[600]),
               ),
             ],
           ),
+          const SizedBox(height: 20),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              '30 Mei 2025',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                color: Colors.grey[700],
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+
+          _buildTimeline(steps, currentStepIndex),
         ],
+      ),
+    );
+  }
+
+  Widget _buildTimeline(List<Map<String, dynamic>> steps, int currentStepIndex) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: List.generate(steps.length, (index) {
+        bool isDone = index < currentStepIndex;
+        bool isCurrent = index == currentStepIndex;
+        bool isLast = index == steps.length - 1;
+
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Column(
+              children: [
+                _buildStepCircle(isDone, isCurrent, index),
+                if (!isLast)
+                  Container(
+                    width: 2,
+                    height: 50,
+                    color: isDone ? const Color(0xFF2E6D9C) : Colors.grey[300],
+                  ),
+              ],
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      steps[index]['label']!,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: isDone || isCurrent ? Colors.black87 : Colors.grey[600],
+                      ),
+                    ),
+                    Text(
+                      steps[index]['description']!,
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: isDone || isCurrent ? Colors.grey[700] : Colors.grey[500],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        );
+      }),
+    );
+  }
+
+  Widget _buildStepCircle(bool isDone, bool isCurrent, int stepIndex) {
+    return Container(
+      width: 28,
+      height: 28,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: isDone ? const Color(0xFF2E6D9C) : (isCurrent ? const Color(0xFF2E6D9C) : Colors.grey[300]),
+        border: isCurrent && !isDone
+            ? Border.all(color: Colors.blue, width: 2)
+            : null,
+      ),
+      child: Center(
+        child: isDone
+            ? const Icon(Icons.check, color: Colors.white, size: 16)
+            : (isCurrent
+                ? Text(
+                    (stepIndex + 1).toString(),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )
+                : const SizedBox.shrink()),
       ),
     );
   }

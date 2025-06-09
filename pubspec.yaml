@@ -44,6 +44,11 @@ flutter:
   - assets/images/sign_in.png
   - assets/images/location.png
   - assets/animation/animation1.json
+  - assets/images/camera.png
+  - assets/images/images.png
+  - assets/images/amico.png
+
+
 
 
 

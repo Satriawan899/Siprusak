@@ -26,7 +26,7 @@ class OnboardingScreen extends StatelessWidget {
                 Column(
                   children: const [
                     Text(
-                      'Help Full',
+                      'Help full',
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -65,7 +65,7 @@ class OnboardingScreen extends StatelessWidget {
                         foregroundColor:
                             Colors.white, // pastikan warna teks & ikon putih
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 40,
+                          horizontal: 50,
                           vertical: 14,
                         ),
                         textStyle: const TextStyle(fontSize: 16),
@@ -102,7 +102,7 @@ class OnboardingScreen extends StatelessWidget {
                           0,
                         ), // warna teks
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 40,
+                          horizontal: 60,
                           vertical: 14,
                         ),
                         textStyle: const TextStyle(fontSize: 16),
