@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart'; // Import ini
+import 'dart:io'; // Import ini untuk tipe File
 
 class LaporScreen extends StatefulWidget {
   const LaporScreen({super.key});
@@ -11,9 +13,38 @@ class _LaporScreenState extends State<LaporScreen> {
   int currentStep = 0;
   final TextEditingController _complaintController = TextEditingController();
 
-  // URL for the image from SIPRUSAK3.png
+  // URL for the image from SIPRUSAK3.png (unused if _imageFile is set)
   final String _previewImageUrl =
-      'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=200&fit=crop'; // This URL seems to match the image in SIPRUSAK3.png
+      'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=200&fit=crop';
+
+  // --- Variabel untuk menyimpan gambar ---
+  File? _imageFile;
+
+  // --- Metode untuk mengambil gambar dari galeri ---
+  Future<void> _pickImageFromGallery() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+
+    if (image != null) {
+      setState(() {
+        _imageFile = File(image.path);
+      });
+      print('Gambar dipilih dari galeri: ${_imageFile!.path}');
+    }
+  }
+
+  // --- Metode untuk mengambil foto dari kamera ---
+  Future<void> _takePhotoWithCamera() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? photo = await picker.pickImage(source: ImageSource.camera);
+
+    if (photo != null) {
+      setState(() {
+        _imageFile = File(photo.path);
+      });
+      print('Foto diambil dengan kamera: ${_imageFile!.path}');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -114,11 +145,10 @@ class _LaporScreenState extends State<LaporScreen> {
                 CircleAvatar(
                   radius: 25,
                   backgroundColor: Color.fromARGB(255, 187, 222, 251),
-                  child: const Icon(
-                    // Menggunakan Icons.person
+                  child: Icon( // Hapus const di sini karena Icons.person sudah const
                     Icons.person,
-                    size: 30, // Sesuaikan ukuran ikon
-                    color: Color(0xFF2E6D9C), // Sesuaikan warna ikon
+                    size: 30,
+                    color: Color(0xFF2E6D9C),
                   ),
                 ),
                 SizedBox(width: 12),
@@ -191,6 +221,7 @@ class _LaporScreenState extends State<LaporScreen> {
     );
   }
 
+  // --- MODIFIKASI _buildSelectEvidenceStep ---
   Widget _buildSelectEvidenceStep() {
     return Center(
       child: Padding(
@@ -198,29 +229,47 @@ class _LaporScreenState extends State<LaporScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('assets/images/camera.png', height: 150),
+            // Tampilkan pratinjau gambar jika sudah ada
+            _imageFile != null
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.file(
+                      _imageFile!,
+                      height: 200,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
+                  )
+                : Image.asset('assets/images/camera.png', height: 150), // Gambar placeholder
             const SizedBox(height: 20),
-            const Text(
-              'Ambil Foto Atau Video\nBukti Pengaduan Anda',
+            Text(
+              _imageFile != null
+                  ? 'Gambar berhasil diunggah!'
+                  : 'Ambil Foto Atau Video\nBukti Pengaduan Anda',
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
                 color: Colors.black87,
               ),
             ),
             const SizedBox(height: 12),
-            const Text(
-              'Melampirkan bukti foto sangat penting, agar\npengaduanmu memiliki bukti yang jelas. Ambil foto\natau video dengan cahaya yang cukup, serta jelas\nuntuk dilihat.',
+            Text(
+              _imageFile != null
+                  ? 'Anda dapat melanjutkan ke pratinjau atau mengganti gambar.'
+                  : 'Melampirkan bukti foto sangat penting, agar\npengaduanmu memiliki bukti yang jelas. Ambil foto\natau video dengan cahaya yang cukup, serta jelas\nuntuk dilihat.',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 14, color: Colors.grey, height: 1.5),
+              style: const TextStyle(fontSize: 14, color: Colors.grey, height: 1.5),
             ),
+            const SizedBox(height: 30),
+            // Tombol untuk memicu pilihan galeri/kamera
           ],
         ),
       ),
     );
   }
 
+  // --- MODIFIKASI _buildPreviewStep ---
   Widget _buildPreviewStep() {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
@@ -247,11 +296,10 @@ class _LaporScreenState extends State<LaporScreen> {
                 CircleAvatar(
                   radius: 25,
                   backgroundColor: Color.fromARGB(255, 187, 222, 251),
-                  child: const Icon(
-                    // Menggunakan Icons.person
+                  child: Icon( // Hapus const di sini karena Icons.person sudah const
                     Icons.person,
-                    size: 30, // Sesuaikan ukuran ikon
-                        color: Color(0xFF2E6D9C),
+                    size: 30,
+                    color: Color(0xFF2E6D9C),
                   ),
                 ),
                 SizedBox(width: 12),
@@ -319,15 +367,26 @@ class _LaporScreenState extends State<LaporScreen> {
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                 ),
                 const SizedBox(height: 12),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Image.asset(
-                    'assets/images/images.png', // Using the defined URL for the image
-                    height: 150,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  ),
-                ),
+                // --- Tampilkan gambar yang dipilih atau placeholder ---
+                _imageFile != null
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.file(
+                          _imageFile!, // Gunakan gambar yang diambil/dipilih
+                          height: 150,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                        ),
+                      )
+                    : ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.asset(
+                          'assets/images/images.png', // Placeholder jika tidak ada gambar
+                          height: 150,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
               ],
             ),
           ),
@@ -385,9 +444,10 @@ class _LaporScreenState extends State<LaporScreen> {
       case 0:
         return 'Lanjut';
       case 1:
-        return 'Ambil foto / gambar';
+        // Tombol ini akan 'Lanjut' hanya jika gambar sudah dipilih
+        return _imageFile != null ? 'Lanjut' : 'Pilih Foto / Video';
       case 2:
-        return 'Kirim Pengaduan'; // Changed to 'Kirim Pengaduan' for the final step
+        return 'Kirim Pengaduan';
       default:
         return 'Lanjut';
     }
@@ -402,11 +462,42 @@ class _LaporScreenState extends State<LaporScreen> {
           });
         };
       case 1:
-        return () {
-          setState(() {
-            currentStep = 2;
-          });
-        };
+        return _imageFile != null // Hanya bisa lanjut jika sudah ada gambar
+            ? () {
+                setState(() {
+                  currentStep = 2;
+                });
+              }
+            : () {
+                // Jika belum ada gambar, tampilkan pilihan ambil/pilih foto
+                showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext bc) {
+                    return SafeArea(
+                      child: Wrap(
+                        children: <Widget>[
+                          ListTile(
+                            leading: const Icon(Icons.photo_library),
+                            title: const Text('Pilih dari Galeri'),
+                            onTap: () {
+                              _pickImageFromGallery();
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          ListTile(
+                            leading: const Icon(Icons.photo_camera),
+                            title: const Text('Ambil Foto Baru'),
+                            onTap: () {
+                              _takePhotoWithCamera();
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                );
+              };
       case 2:
         return () {
           // Submit complaint
