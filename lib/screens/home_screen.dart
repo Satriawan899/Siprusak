@@ -85,14 +85,25 @@ class CurveClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     Path path = Path();
-    path.lineTo(0, size.height - 30);
+    path.lineTo(0, size.height - 30); // Mulai sedikit di atas dasar
+
+    // Titik kontrol pertama untuk lengkungan ke atas
     path.quadraticBezierTo(
-      size.width / 3,
-      size.height + 15,
-      size.width,
-      size.height - 30,
+      size.width * 0.25, // x dari titik kontrol 1
+      size.height,      // y dari titik kontrol 1 (lebih rendah untuk lengkungan ke atas)
+      size.width * 0.5, // x akhir dari segmen pertama
+      size.height - 30, // y akhir dari segmen pertama
     );
-    path.lineTo(size.width, 0);
+
+    // Titik kontrol kedua untuk lengkungan ke bawah
+    path.quadraticBezierTo(
+      size.width * 0.75, // x dari titik kontrol 2
+      size.height - 60,  // y dari titik kontrol 2 (lebih tinggi untuk lengkungan ke bawah)
+      size.width,        // x akhir dari segmen kedua
+      size.height - 30,  // y akhir dari segmen kedua
+    );
+
+    path.lineTo(size.width, 0); // Garis lurus ke sudut kanan atas
     path.close();
     return path;
   }
@@ -264,114 +275,158 @@ class HomeScreenContent extends StatelessWidget {
     return SafeArea(
       child: Column(
         children: [
-          // Custom AppBar dengan bentuk melengkung menggunakan ClipPath
-          ClipPath(
-            clipper: CurveClipper(),
-            child: Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Color(0xFF2E6D9C), Color(0xFF4A90C2)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
+          // Pembungkus untuk Stack agar tinggi tetap 130
+          SizedBox(
+            height: 200, // Menentukan tinggi keseluruhan area AppBar
+            child: Stack(
+              children: [
+                // Area melengkung (sekarang sebagai latar belakang di Stack)
+                Positioned.fill(
+                  child: ClipPath(
+                    clipper: CurveClipper(),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [Color(0xFF2E6D9C), Color(0xFF4A90C2)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                         boxShadow: [
+                          BoxShadow( 
+                            color: Colors.black.withOpacity(0.5),
+                            spreadRadius: 5,
+                            blurRadius: 15,
+                            offset: const Offset(0, 5), // Offset bisa tetap const
+                          ),
+                        ],
+                      ),
+                      child: Container(), // Container kosong sebagai latar belakang
+                    ),
+                  ),
                 ),
-              ),
-              padding: const EdgeInsets.all(20),
-              height: 180,
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+               // --- BULAT-BULAT DEKORATIF ---
+                Positioned(
+                  top: -30,
+                  left: -30,
+                  child: Container(
+                    width: 100,
+                    height: 100,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.1),
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 50,
+                  right: -20,
+                  child: Container(
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.1),
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ),
+                // Konten AppBar (Hai, pengguna, lokasi, notifikasi, tombol pengaduan)
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
                     children: [
-                      const Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Hai, pengguna',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            SizedBox(height: 4),
-                            Row(
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Icon(
-                                  Icons.location_on,
-                                  color: Colors.white70,
-                                  size: 16,
-                                ),
-                                SizedBox(width: 4),
                                 Text(
-                                  'Jl.Raya Jayagita Gg.II Blok B',
+                                  'Hai, pengguna',
                                   style: TextStyle(
-                                    color: Colors.white70,
-                                    fontSize: 14,
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
                                   ),
+                                ),
+                                SizedBox(height: 4),
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.location_on,
+                                      color: Colors.white70,
+                                      size: 16,
+                                    ),
+                                    SizedBox(width: 4),
+                                    Text(
+                                      'Jl.Raya Jayagita Gg.II Blok B',
+                                      style: TextStyle(
+                                        color: Colors.white70,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
-                          ],
-                        ),
-                      ),
-                      // Icon Notifikasi yang bisa diklik
-                      GestureDetector(
-                        onTap: () => _showNotificationPopup(context),
-                        child: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2),
-                            borderRadius: BorderRadius.circular(8),
                           ),
-                          child: const Icon(
-                            Icons.notifications_outlined,
-                            color: Colors.white,
-                            size: 24,
+                          GestureDetector(
+                            onTap: () => _showNotificationPopup(context),
+                            child: Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.2),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: const Icon(
+                                Icons.notifications_outlined,
+                                color: Colors.white,
+                                size: 24,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: ElevatedButton.icon(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const LaporScreen(),
+                              ),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 15,
+                              vertical: 15,
+                            ),
+                            minimumSize: Size.zero,
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            elevation: 0,
+                          ),
+                          icon: const Icon(Icons.add, size: 18),
+                          label: const Text(
+                            'Pengaduan',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 16),
-                  // Tombol Pengaduan dikembalikan ke sini
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: ElevatedButton.icon(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const LaporScreen(),
-                          ),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 15,
-                          vertical: 15, // Sedikit kurangi padding vertikal
-                        ),
-                        minimumSize: Size.zero,
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        elevation: 0,
-                      ),
-                      icon: const Icon(Icons.add, size: 18),
-                      label: const Text(
-                        'Pengaduan',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
 
@@ -515,7 +570,7 @@ class HomeScreenContent extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Yulia Nita',
+                                    'Daniel Cruz',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16,
@@ -783,21 +838,18 @@ class HomeScreenContent extends StatelessWidget {
     required Color color, // Menggunakan Color
     required VoidCallback onTap,
   }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
-              spreadRadius: 1,
-              blurRadius: 10,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
+    return Material( // Membungkus dengan Material untuk InkWell
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(12),
+      elevation: 2, // Memberikan sedikit elevasi agar efek shadow terlihat
+      shadowColor: Colors.grey.withOpacity(0.1), // Menambahkan shadow ke Material
+
+      child: InkWell( // Mengganti GestureDetector dengan InkWell
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12), // Pastikan borderRadius cocok
+        splashColor: color.withOpacity(0.3), // Warna riak saat disentuh
+        highlightColor: color.withOpacity(0.1), // Warna sorotan saat ditahan
+
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -808,7 +860,6 @@ class HomeScreenContent extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(
-                // Menggunakan Icon
                 icon,
                 size: 32,
                 color: color,

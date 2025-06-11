@@ -16,8 +16,8 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   // State untuk menyimpan data profil
-  String _fullName = 'Yulia Nita';
-  String _email = 'yulia.nita@example.com';
+  String _fullName = 'Daniel Cruz';
+  String _email = 'daniel.cruz@gmail.com';
   String _phoneNumber = '+62 812 3456 7890'; // State untuk nomor telepon
 
   // Current index untuk BottomNavigationBar di ProfileScreen ini.
@@ -237,11 +237,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     context,
                     icon: Icons.info_outline,
                     title: 'Tentang Aplikasi',
-                    description: 'Informasi versi dan lisensi',
+                    description: 'Informasi dan lisensi',
                     onTap: () {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text('Navigasi ke Tentang Aplikasi'),
+                          content: Text('Aplikasi dibuat untuk kepentingan masyarakat, Lisensi by cicak crew'),
                         ),
                       );
                     },
