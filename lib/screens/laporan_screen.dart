@@ -26,7 +26,7 @@ class LaporanScreen extends StatelessWidget {
         children: [
           _buildReportCard(
             context: context,
-            name: 'Yulia Nita',
+            name: 'Daniel Cruz',
             time: '1 Jam Lalu Pengaduan',
             location: 'Denpasar Selatan, Bali',
             description:

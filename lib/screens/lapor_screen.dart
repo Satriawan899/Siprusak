@@ -156,7 +156,7 @@ class _LaporScreenState extends State<LaporScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Yulia Nita',
+                      'Daniel Cruz',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
@@ -307,7 +307,7 @@ class _LaporScreenState extends State<LaporScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Yulia Nita',
+                      'Daniel Cruz',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
