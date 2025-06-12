@@ -25,6 +25,8 @@ dev_dependencies:
     sdk: flutter
   mobile_scanner: ^4.0.0 # Gunakan versi terbaru
   image_picker: ^1.1.0 # <<< PASTIKAN INI ADA DAN INDENTASINYA BENAR
+  google_fonts: ^6.2.1 # Periksa versi terbaru
+
 
 
 
@@ -39,7 +41,7 @@ flutter:
   uses-material-design: true
 
   assets:
-  - assets/images/logo.png
+  - assets/images/logosiprusak.png
   - assets/images/on_board.png
   - assets/images/report.png
   - assets/images/login.png

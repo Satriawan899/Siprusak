@@ -90,7 +90,7 @@ class CurveClipper extends CustomClipper<Path> {
     // Titik kontrol pertama untuk lengkungan ke atas
     path.quadraticBezierTo(
       size.width * 0.25, // x dari titik kontrol 1
-      size.height,      // y dari titik kontrol 1 (lebih rendah untuk lengkungan ke atas)
+      size.height, // y dari titik kontrol 1 (lebih rendah untuk lengkungan ke atas)
       size.width * 0.5, // x akhir dari segmen pertama
       size.height - 30, // y akhir dari segmen pertama
     );
@@ -98,9 +98,10 @@ class CurveClipper extends CustomClipper<Path> {
     // Titik kontrol kedua untuk lengkungan ke bawah
     path.quadraticBezierTo(
       size.width * 0.75, // x dari titik kontrol 2
-      size.height - 60,  // y dari titik kontrol 2 (lebih tinggi untuk lengkungan ke bawah)
-      size.width,        // x akhir dari segmen kedua
-      size.height - 30,  // y akhir dari segmen kedua
+      size.height -
+          60, // y dari titik kontrol 2 (lebih tinggi untuk lengkungan ke bawah)
+      size.width, // x akhir dari segmen kedua
+      size.height - 30, // y akhir dari segmen kedua
     );
 
     path.lineTo(size.width, 0); // Garis lurus ke sudut kanan atas
@@ -291,20 +292,24 @@ class HomeScreenContent extends StatelessWidget {
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),
-                         boxShadow: [
-                          BoxShadow( 
+                        boxShadow: [
+                          BoxShadow(
                             color: Colors.black.withOpacity(0.5),
                             spreadRadius: 5,
                             blurRadius: 15,
-                            offset: const Offset(0, 5), // Offset bisa tetap const
+                            offset: const Offset(
+                              0,
+                              5,
+                            ), // Offset bisa tetap const
                           ),
                         ],
                       ),
-                      child: Container(), // Container kosong sebagai latar belakang
+                      child:
+                          Container(), // Container kosong sebagai latar belakang
                     ),
                   ),
                 ),
-               // --- BULAT-BULAT DEKORATIF ---
+                // --- BULAT-BULAT DEKORATIF ---
                 Positioned(
                   top: -30,
                   left: -30,
@@ -484,7 +489,7 @@ class HomeScreenContent extends StatelessWidget {
                         },
                       ),
                       _buildMenuCard(
-                        title: 'Riwayat Lapor',
+                        title: 'Riwayat pengaduan',
                         icon: Icons.history, // Menggunakan IconData
                         color: Colors.green, // Menggunakan Color
                         onTap: () {
@@ -627,6 +632,8 @@ class HomeScreenContent extends StatelessWidget {
                       ],
                     ),
                   ),
+                  const SizedBox(height: 12),
+
                   Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -724,6 +731,7 @@ class HomeScreenContent extends StatelessWidget {
                       ],
                     ),
                   ),
+                  const SizedBox(height: 12),
 
                   Container(
                     decoration: BoxDecoration(
@@ -838,13 +846,17 @@ class HomeScreenContent extends StatelessWidget {
     required Color color, // Menggunakan Color
     required VoidCallback onTap,
   }) {
-    return Material( // Membungkus dengan Material untuk InkWell
+    return Material(
+      // Membungkus dengan Material untuk InkWell
       color: Colors.white,
       borderRadius: BorderRadius.circular(12),
       elevation: 2, // Memberikan sedikit elevasi agar efek shadow terlihat
-      shadowColor: Colors.grey.withOpacity(0.1), // Menambahkan shadow ke Material
+      shadowColor: Colors.grey.withOpacity(
+        0.1,
+      ), // Menambahkan shadow ke Material
 
-      child: InkWell( // Mengganti GestureDetector dengan InkWell
+      child: InkWell(
+        // Mengganti GestureDetector dengan InkWell
         onTap: onTap,
         borderRadius: BorderRadius.circular(12), // Pastikan borderRadius cocok
         splashColor: color.withOpacity(0.3), // Warna riak saat disentuh
@@ -859,11 +871,7 @@ class HomeScreenContent extends StatelessWidget {
                 color: color.withOpacity(0.1), // Background berwarna untuk icon
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Icon(
-                icon,
-                size: 32,
-                color: color,
-              ),
+              child: Icon(icon, size: 32, color: color),
             ),
             const SizedBox(height: 8),
             Text(

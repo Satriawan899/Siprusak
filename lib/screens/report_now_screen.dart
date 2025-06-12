@@ -18,7 +18,6 @@ class ReportNowScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              const SizedBox(height: 30),
               Image.asset(
                 'assets/images/report.png', // Pastikan gambar ini ada di folder assets
                 height: size.height * 0.35,
@@ -33,7 +32,7 @@ class ReportNowScreen extends StatelessWidget {
                       color: Color(0xFF2E6D9C),
                     ),
                   ),
-                  SizedBox(height: 12),
+                  SizedBox(height: 5),
                   Text(
                     'Ayo laporkan keluh kesah infrastruktur\ndaerah anda sekarang!',
                     textAlign: TextAlign.center,
@@ -69,6 +68,7 @@ class ReportNowScreen extends StatelessWidget {
                   ),
                 ),
               ),
+              const SizedBox(height: 12),
             ],
           ),
         ),
