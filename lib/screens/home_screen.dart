@@ -288,7 +288,7 @@ class HomeScreenContent extends StatelessWidget {
                     child: Container(
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
-                          colors: [Color(0xFF2E6D9C), Color(0xFF4A90C2)],
+                          colors: [ Color(0xFF4A90C2),Color(0xFF2E6D9C)],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sip_rusak/screens/login_screen.dart';
 import 'package:sip_rusak/screens/report_now_screen.dart'; // atau halaman berikutnya
 
 class OnboardingScreen extends StatelessWidget {
@@ -80,7 +81,7 @@ class OnboardingScreen extends StatelessWidget {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => const ReportNowScreen(),
+                            builder: (_) => const LoginScreen(),
                           ),
                         );
                       },
