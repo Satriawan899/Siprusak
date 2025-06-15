@@ -1,10 +1,14 @@
 // profile_screen.dart
 import 'package:flutter/material.dart';
+import 'package:sip_rusak/screens/bantuan_screen.dart';
 import 'package:sip_rusak/screens/login_screen.dart';
+import 'package:sip_rusak/screens/notifikasi_screen.dart';
+import 'package:sip_rusak/services/keamanan_screen.dart';
 import 'package:sip_rusak/services/kelola_profile.dart'; // Pastikan import ini benar
 import 'package:sip_rusak/screens/home_screen.dart'; // Import HomeScreen
 import 'package:sip_rusak/screens/lapor_screen.dart'; // Import LaporScreen
-import 'package:sip_rusak/screens/riwayat_screen.dart'; // Import RiwayatScreen
+import 'package:sip_rusak/screens/riwayat_screen.dart';
+import 'package:sip_rusak/services/tentang_aplikasi.dart'; // Import RiwayatScreen
 
 // Ubah ProfileScreen menjadi StatefulWidget
 class ProfileScreen extends StatefulWidget {
@@ -40,17 +44,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
         // Jika ProfileScreen adalah rute pertama yang di-push dari 'main.dart'
         // dan tidak ada rute lain di bawahnya, tombol ini mungkin tidak muncul
         // atau akan keluar dari aplikasi (tergantung platform).
-        leading: Navigator.canPop(context) ? IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Color.fromARGB(255, 255, 255, 255),
-          ),
-          onPressed: () {
-            // Ketika tombol kembali di AppBar ditekan, cukup pop layar ini.
-            // Ini akan kembali ke HomeScreen yang memanggilnya.
-            Navigator.pop(context);
-          },
-        ) : null,
+        leading:
+            Navigator.canPop(context)
+                ? IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back,
+                    color: Color.fromARGB(255, 255, 255, 255),
+                  ),
+                  onPressed: () {
+                    // Ketika tombol kembali di AppBar ditekan, cukup pop layar ini.
+                    // Ini akan kembali ke HomeScreen yang memanggilnya.
+                    Navigator.pop(context);
+                  },
+                )
+                : null,
         automaticallyImplyLeading: false, // Kita mengatur leading secara manual
       ),
       body: SingleChildScrollView(
@@ -73,7 +80,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   CircleAvatar(
                     radius: 55,
                     backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-                    child: const Icon( // Menggunakan const karena ikonnya statis
+                    child: const Icon(
+                      // Menggunakan const karena ikonnya statis
                       Icons.person,
                       size: 70,
                       color: Color(0xFF2E6D9C),
@@ -93,7 +101,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     _email, // Gunakan state _email
                     style: const TextStyle(color: Colors.white70, fontSize: 15),
                   ),
-                  const SizedBox(height: 4), // Jarak antara email dan nomor telepon
+                  const SizedBox(
+                    height: 4,
+                  ), // Jarak antara email dan nomor telepon
                   Text(
                     _phoneNumber, // Tambahkan nomor telepon di sini
                     style: const TextStyle(color: Colors.white70, fontSize: 15),
@@ -104,12 +114,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 12, // Sedikit lebih lebar
-                      vertical: 12,   // Sedikit lebih tinggi
+                      vertical: 12, // Sedikit lebih tinggi
                     ),
                     decoration: BoxDecoration(
                       color: Colors.green[400], // Warna hijau terang
                       borderRadius: BorderRadius.circular(15), // Lebih bulat
-                      boxShadow: [ // Tambahkan sedikit shadow untuk efek 3D
+                      boxShadow: [
+                        // Tambahkan sedikit shadow untuk efek 3D
                         BoxShadow(
                           color: Colors.black.withOpacity(0.1),
                           spreadRadius: 1,
@@ -118,10 +129,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ],
                     ),
-                    child: Row( // Gunakan Row untuk ikon dan teks
-                      mainAxisSize: MainAxisSize.min, // Sesuaikan ukuran dengan konten
+                    child: Row(
+                      // Gunakan Row untuk ikon dan teks
+                      mainAxisSize:
+                          MainAxisSize.min, // Sesuaikan ukuran dengan konten
                       children: const [
-                        Icon(Icons.check_circle, color: Colors.white, size: 16), // Ikon ceklis
+                        Icon(
+                          Icons.check_circle,
+                          color: Colors.white,
+                          size: 16,
+                        ), // Ikon ceklis
                         SizedBox(width: 6), // Jarak antara ikon dan teks
                         Text(
                           'Pengguna Aktif', // Status atau peran
@@ -152,13 +169,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       final updatedData = await Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => KelolaProfile(
-                            initialData: ProfileData(
-                              fullName: _fullName,
-                              email: _email,
-                              phoneNumber: _phoneNumber,
-                            ),
-                          ),
+                          builder:
+                              (context) => KelolaProfile(
+                                initialData: ProfileData(
+                                  fullName: _fullName,
+                                  email: _email,
+                                  phoneNumber: _phoneNumber,
+                                ),
+                              ),
                         ),
                       );
 
@@ -170,7 +188,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         });
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                              content: Text('Profil berhasil diperbarui!')),
+                            content: Text('Profil berhasil diperbarui!'),
+                          ),
                         );
                       }
                     },
@@ -181,9 +200,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     title: 'Keamanan Akun',
                     description: 'Ubah password, lihat aktivitas login',
                     onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Navigasi ke Keamanan Akun'),
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const KeamananScreen(),
                         ),
                       );
                     },
@@ -192,27 +212,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const SizedBox(height: 20),
 
                   _buildOptionGroupTitle('Pengaturan Aplikasi'),
-                  _buildProfileOptionCard(
-                    context,
-                    icon: Icons.settings_outlined,
-                    title: 'Pengaturan Umum',
-                    description: 'Atur preferensi aplikasi dan notifikasi',
-                    onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Navigasi ke Pengaturan Umum'),
-                        ),
-                      );
-                    },
-                  ),
+                  // _buildProfileOptionCard(
+                  //   context,
+                  //   icon: Icons.settings_outlined,
+                  //   title: 'Pengaturan Umum',
+                  //   description: 'Atur preferensi aplikasi dan notifikasi',
+                  //   onTap: () {
+                  //     ScaffoldMessenger.of(context).showSnackBar(
+                  //       const SnackBar(
+                  //         content: Text('Navigasi ke Pengaturan Umum'),
+                  //       ),
+                  //     );
+                  //   },
+                  // ),
                   _buildProfileOptionCard(
                     context,
                     icon: Icons.notifications_none,
                     title: 'Notifikasi',
                     description: 'Atur preferensi notifikasi',
                     onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Navigasi ke Notifikasi')),
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const NotificationScreen(),
+                        ),
                       );
                     },
                   ),
@@ -226,9 +249,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     title: 'Pusat Bantuan',
                     description: 'Temukan jawaban atas pertanyaan Anda',
                     onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Navigasi ke Pusat Bantuan'),
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const HelpCenterScreen(),
                         ),
                       );
                     },
@@ -239,9 +263,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     title: 'Tentang Aplikasi',
                     description: 'Informasi dan lisensi',
                     onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Aplikasi dibuat untuk kepentingan masyarakat, Lisensi by cicak crew'),
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const AboutAndLicensesScreen(),
                         ),
                       );
                     },
@@ -257,9 +282,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.red[600],
                         foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 16,
-                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -276,10 +299,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                   const SizedBox(height: 20), // Jarak di bagian bawah
-
                   // Tambahkan teks versi di sini
                   Text(
-                    'Versi Aplikasi 1.1.0',
+                    'Version application 1.0.0',
                     style: TextStyle(
                       fontSize: 13,
                       color: Colors.black.withOpacity(0.5), // 50% hitam
@@ -385,9 +407,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Card(
       margin: const EdgeInsets.only(bottom: 10),
       elevation: 0.5,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(12),
@@ -395,11 +415,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
           child: Row(
             children: [
-              Icon(
-                icon,
-                color: const Color(0xFF2E6D9C),
-                size: 26,
-              ),
+              Icon(icon, color: const Color(0xFF2E6D9C), size: 26),
               const SizedBox(width: 16),
               Expanded(
                 child: Column(
